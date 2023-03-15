@@ -15,7 +15,7 @@ UINT16 distances[CENTERS][POINTS], current_iteration = 0, total_size = 0, flag_r
 UINT16 received_points_index = 0, initial_sample = 0, additional_size = 0, centers_index = 0, randompoint = 0, randcount = 0;
 UINT16 Xpoints[BUFFERS][POINTS], Ypoints[BUFFERS][POINTS], Xcenters[BUFFERS][CENTERS], Ycenters[BUFFERS][CENTERS], index_vector_receiving = 0, index_vector_clustering = 0;
 UINT16 clusters[CENTERS][POINTS], shorter_distance[POINTS], count[CENTERS], num_packets = 0;
-UINT16 i = 0, j = 0 saveX=0, saveY=0;
+UINT16 i = 0, j = 0, saveX=0, saveY=0;
 __declspec(emem shared scope(global) export) uint32_t sumX[CENTERS], sumY[CENTERS];
 
 void resetVectors()
