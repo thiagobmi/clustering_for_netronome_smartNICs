@@ -15,7 +15,7 @@ UINT16 distances[CENTERS][POINTS], current_iteration = 0, total_size = 0, flag_r
 UINT16 received_points_index = 0, initial_sample = 0, additional_size = 0, centers_index = 0, randompoint = 0, randcount = 0;
 UINT16 Xpoints[BUFFERS][POINTS], Ypoints[BUFFERS][POINTS], Xcenters[BUFFERS][CENTERS], Ycenters[BUFFERS][CENTERS], index_vector_receiving = 0, index_vector_clustering = 0;
 UINT16 clusters[CENTERS][POINTS], shorter_distance[POINTS], count[CENTERS], num_packets = 0;
-UINT16 i = 0, j = 0 guardaX=0, guardaY=0;
+UINT16 i = 0, j = 0 saveX=0, saveY=0;
 __declspec(emem shared scope(global) export) uint32_t sumX[CENTERS], sumY[CENTERS];
 
 void resetVectors()
@@ -98,8 +98,8 @@ int pif_plugin_func(EXTRACTED_HEADERS_T *headers, MATCH_DATA_T *data)
     PIF_PLUGIN_test_T *headerTest = pif_plugin_hdr_get_test(headers);
 
     //these are for showing the coords of one of the centroids as soon as the program has finished the calculations
-    PIF_HEADER_SET_test___Xcentro(headerTest, guardaX);
-    PIF_HEADER_SET_test___Ycentro(headerTest, guardaY);
+    PIF_HEADER_SET_test___Xcentro(headerTest, saveX);
+    PIF_HEADER_SET_test___Ycentro(headerTest, saveY);
 
     //get the number of iterations per packet and add to the number of done iterations
     additional_size = PIF_HEADER_GET_test___add(headerTest);
@@ -189,10 +189,12 @@ int pif_plugin_func(EXTRACTED_HEADERS_T *headers, MATCH_DATA_T *data)
     //checks the center index. If centers_index==CENTERS, the first clustering is complete.
     if (centers_index == CENTERS)
     {
-        guardaX=(sumX[1]/count[1]);
-        guardaY=(sumY[1]/count[1]);
-        PIF_HEADER_SET_test___Xcentro(headerTest, guardaX);
-        PIF_HEADER_SET_test___Ycentro(headerTest, guardaY);
+        //stores the coords of one centroid
+        saveX=(sumX[1]/count[1]);
+        saveY=(sumY[1]/count[1]);
+        //
+        PIF_HEADER_SET_test___Xcentro(headerTest, saveX);
+        PIF_HEADER_SET_test___Ycentro(headerTest, saveY);
         resetVectors();
         centers_index = 0;
         //start clustering points in the next buffer.
